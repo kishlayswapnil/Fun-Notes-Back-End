@@ -36,4 +36,15 @@ public class UserController {
         Response response = userService.register(registerDto);
         return new ResponseEntity(response, HttpStatus.OK);
     }
+
+    //API for reset the forget password.
+    @PostMapping("/forgetPassword")
+    public ResponseEntity<Response> forgetPassword(@RequestParam("email") String email) {
+        boolean result = userService.isUserExist(email);
+        if (result)
+            return new ResponseEntity(result, HttpStatus.OK);
+        return new ResponseEntity(result, HttpStatus.BAD_REQUEST);
+
+    }
+
 }
