@@ -7,7 +7,6 @@ import com.bridgelabz.fundoonotes.model.User;
 import com.bridgelabz.fundoonotes.repository.UserRepository;
 import com.bridgelabz.fundoonotes.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,7 +24,7 @@ public class UserServiceImplements implements UserService {
     public Response login(LoginDto loginDto) {
 
         Optional<User> user = userRepository.findUserByEmailId(loginDto.getEmailId());
-        return new Response(HttpStatus.OK, "Login Successful");
+        return new Response(200, "Login Successful");
     }
 
     @Transactional
@@ -33,8 +32,8 @@ public class UserServiceImplements implements UserService {
     public Response register(RegisterDto registerDto) {
         Optional<User> userMail = userRepository.findUserByEmailId(registerDto.getEmailId());
         if (userMail != null)
-            return new Response(HttpStatus.OK, "Registration Successful");
-        return new Response(HttpStatus.BAD_REQUEST, "Error");
+            return new Response(200, "Registration Successful");
+        return new Response(400, "Error");
 
     }
 }
