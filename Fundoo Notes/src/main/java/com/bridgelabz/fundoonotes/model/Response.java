@@ -5,11 +5,11 @@ import org.springframework.http.HttpStatus;
 public class Response {
 
     //Variable
-    private HttpStatus statusCode;
+    private int statusCode;
     private String statusMessage;
 
     //Parameterised Constructor.
-    public Response(HttpStatus statusCode, String message) {
+    public Response(int statusCode, String message) {
         super();
         this.statusCode=statusCode;
         this.statusMessage=message;
@@ -21,11 +21,11 @@ public class Response {
     }
 
     //Getters and Setters
-    public HttpStatus getStatusCode() {
+    public int getStatusCode() {
         return statusCode;
     }
 
-    public void setStatusCode(HttpStatus statusCode) {
+    public void setStatusCode(int statusCode) {
         this.statusCode = statusCode;
     }
 
