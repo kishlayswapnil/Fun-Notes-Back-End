@@ -1,11 +1,11 @@
-package com.bridgelabz.fundoonotes.serviceimplimentation;
+package com.bridgelabz.fundoonotes.service;
 
 import com.bridgelabz.fundoonotes.dto.LoginDto;
 import com.bridgelabz.fundoonotes.dto.RegisterDto;
+import com.bridgelabz.fundoonotes.model.MailObject;
 import com.bridgelabz.fundoonotes.model.Response;
 import com.bridgelabz.fundoonotes.model.User;
 import com.bridgelabz.fundoonotes.repository.UserRepository;
-import com.bridgelabz.fundoonotes.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +18,10 @@ public class UserServiceImplements implements UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    //Fetching the mail object class from model.
+    @Autowired
+    private MailObject mailObject;
 
     @Transactional
     @Override
@@ -35,5 +39,22 @@ public class UserServiceImplements implements UserService {
             return new Response(200, "Registration Successful");
         return new Response(400, "Error");
 
+    }
+
+    @Transactional
+    @Override
+    public Boolean isUserExist(String email) {
+
+        //Fetching from email id.
+        Optional<User> user = userRepository.findUserByEmailId(email);
+        if (user != null) {
+
+            //Setting values in mail object.
+            mailObject.setEmail(email);
+            mailObject.setSubject("verification");
+            return true;
+        } else {
+            return false;
+        }
     }
 }
