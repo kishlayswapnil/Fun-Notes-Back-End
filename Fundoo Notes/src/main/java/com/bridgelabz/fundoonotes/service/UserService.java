@@ -8,4 +8,6 @@ public interface UserService {
     Response login(LoginDto user);
 
     Response register(RegisterDto userRecord);
+
+    Boolean isUserExist(String email);
 }
