@@ -6,6 +6,7 @@ import com.bridgelabz.fundoonotes.model.MailObject;
 import com.bridgelabz.fundoonotes.model.Response;
 import com.bridgelabz.fundoonotes.model.User;
 import com.bridgelabz.fundoonotes.repository.UserRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,12 +17,17 @@ import java.util.Optional;
 @Service
 public class UserServiceImplements implements UserService {
 
+    private User userInformation = new User();
+    
     @Autowired
     private UserRepository userRepository;
 
     //Fetching the mail object class from model.
     @Autowired
     private MailObject mailObject;
+
+    @Autowired
+    private ModelMapper modelMapper;
 
     @Transactional
     @Override
@@ -35,10 +41,11 @@ public class UserServiceImplements implements UserService {
     @Override
     public Response register(RegisterDto registerDto) {
         Optional<User> userMail = userRepository.findUserByEmailId(registerDto.getEmailId());
-        if (userMail != null)
+        if (userMail != null) {
+            userInformation = modelMapper.map(registerDto, User.class);
             return new Response(200, "Registration Successful");
+        }
         return new Response(400, "Error");
-
     }
 
     @Transactional
