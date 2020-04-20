@@ -34,18 +34,23 @@ public class UserServiceImplements implements UserService {
     public Response login(LoginDto loginDto) {
 
         Optional<User> user = userRepository.findUserByEmailId(loginDto.getEmailId());
-        return new Response(200, "Login Successful");
+        return new Response("Login Successful", 200);
     }
 
     @Transactional
     @Override
-    public Response register(RegisterDto registerDto) {
+    public Response register(RegisterDto registerDto) throws Exception, NullPointerException {
+
+        //Fetching email from dto.
         Optional<User> userMail = userRepository.findUserByEmailId(registerDto.getEmailId());
-        if (userMail != null) {
-            userInformation = modelMapper.map(registerDto, User.class);
-            return new Response(200, "Registration Successful");
+        if (userMail.isEmpty()) {
+
+            //Added Mapping to connect dto and entity and then saving in DB.
+            User userInformation = modelMapper.map(registerDto, User.class);
+            userRepository.save(userInformation);
+            return new Response("Registration Successful", 200);
         }
-        return new Response(400, "Error");
+        return new Response("Error", 400);
     }
 
     @Transactional
