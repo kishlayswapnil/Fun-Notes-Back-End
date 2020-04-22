@@ -1,26 +1,26 @@
 package com.bridgelabz.fundoonotes.dto;
 
-public class ForgotDto {
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Pattern;
+import java.io.Serializable;
 
-    //Variables
-    private String newPassword;
+public class ForgotDto implements Serializable {
+    private static final long serialVersionUID = 1L;
 
-    private String email;
+    @NotEmpty(message = "Enter your email address")
+    @Pattern(regexp = "^[\\\\w-\\\\+]+(\\\\.[\\\\w]+)*@[\\\\w-]+(\\\\.[\\\\w]+)*(\\\\.[a-z]{2,})$", message="Enter valid email address.!")
+    private String emailId;
 
-    //Getters and Setters.
-    public String getPassword() {
-        return newPassword;
+    //default constructor
+    public ForgotDto() {
     }
 
-    public void setPassword(String password) {
-        this.newPassword = password;
+    //Setters and Getters
+    public String getEmailId() {
+        return emailId;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
+    public void setEmailId(String emailId) {
+        this.emailId = emailId;
     }
 }
