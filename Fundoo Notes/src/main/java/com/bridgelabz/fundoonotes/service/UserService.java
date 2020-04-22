@@ -12,7 +12,7 @@ public interface UserService {
 
     Response forgotPassword(String email);
 
-    Response userVerification(String email);
+    Response userVerification(String token);
 
     Response resetPassword(String newPassword, String token);
 }
