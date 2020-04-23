@@ -19,4 +19,8 @@ public class MailService {
             e.printStackTrace();
         }
     }
+
+    public String fromMessage(String url,String token) {
+        return  url +"/" +token;
+    }
 }
