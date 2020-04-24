@@ -8,7 +8,7 @@ import com.bridgelabz.fundoonotes.model.ResponseToken;
 public interface UserService {
     ResponseToken login(LoginDto user);
 
-    Response register(RegisterDto userRecord);
+    Response register(RegisterDto userRecord) throws Exception;
 
     Response forgotPassword(String email);
 
