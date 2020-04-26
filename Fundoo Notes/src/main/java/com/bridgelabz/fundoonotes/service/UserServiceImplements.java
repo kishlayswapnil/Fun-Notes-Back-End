@@ -12,15 +12,14 @@ import com.bridgelabz.fundoonotes.utility.ResponseInfo;
 import com.bridgelabz.fundoonotes.utility.TokenGenerator;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-
 import java.util.Optional;
 
 @Service
+@PropertySource("classpath:status.properties")
 public class UserServiceImplements implements UserService {
 
     private User userInformation = new User();
@@ -47,7 +46,6 @@ public class UserServiceImplements implements UserService {
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    @Transactional
     @Override
     public ResponseToken login(LoginDto loginDto) {
 
@@ -65,7 +63,6 @@ public class UserServiceImplements implements UserService {
         throw new UserException(Integer.parseInt(environment.getProperty("status.login.errorCode")), environment.getProperty("status.login.invalidUser"));
     }
 
-    @Transactional
     @Override
     public Response register(RegisterDto registerDto) throws Exception, NullPointerException {
 
@@ -77,7 +74,7 @@ public class UserServiceImplements implements UserService {
             User userInformation = modelMapper.map(registerDto, User.class);
             String password = bCryptPasswordEncoder.encode(registerDto.getPassword());
             userInformation.setPassword(password);
-            userInformation.setIsVerified(true);
+            userInformation.setVerified(true);
             String mailResponse = mailService.fromMessage("http://localhost:8080/verification/",
                     tokenGenerator.generateUserToken(userInformation.getId()));
             mailObject.setEmail(registerDto.getEmailId());
@@ -85,41 +82,38 @@ public class UserServiceImplements implements UserService {
             mailService.sendMail(registerDto.getEmailId(),mailResponse);
 
             userRepository.save(userInformation);
-            throw new UserException(200,"Registration Successful");
+            throw new UserException(Integer.parseInt(environment.getProperty("status.success.code")),environment.getProperty("status.register.success"));
         }
-        throw new UserException(400, "Registration Not Successful");
+        throw new UserException(Integer.parseInt(environment.getProperty("status.register.errorCode")),environment.getProperty("status.register.duplicateEmailError"));
 
     }
 
-    @Transactional
     @Override
     public Response forgotPassword(String email) {
         Optional<User> user = userRepository.findUserByEmailId(email);
         if(!user.isPresent())
             throw new UserException(Integer.parseInt(environment.getProperty("status.forgotPassword.errorCode")), environment.getProperty("status.forgotPassword.invalidEmail"));
-        String passwordResetLink = "";
+        String passwordResetLink = "http://localhost:8080/verification/";
         passwordResetLink = tokenGenerator.generateUserToken(user.get().getId());
         mailService.sendMail(user.get().getEmailId(), passwordResetLink);
         Response response = ResponseInfo.getResponse(Integer.parseInt(environment.getProperty("status.success.code")), environment.getProperty("status.forgotPassword.success"));
         return response;
     }
 
-    @Transactional
     @Override
     public Response userVerification(String token) {
         int id = tokenGenerator.retrieveIdFromToken(token);
         Optional<User> user = userRepository.findById(id);
         if(!user.isPresent())
-            throw new UserException(Integer.parseInt(environment.getProperty("status.forgotPassword.errorCode")), environment.getProperty("status.forgotPassword.invalidEmail"));
-        String passwordResetLink = "";
+            throw new UserException(Integer.parseInt(environment.getProperty("status.user.errorCode")), environment.getProperty("status.user.existError"));
+        String passwordResetLink = "http://localhost:8080/verification/";
         passwordResetLink = passwordResetLink + tokenGenerator.generateUserToken(user.get().getId());
         mailService.sendMail(user.get().getEmailId(), passwordResetLink);
         Response response = ResponseInfo.getResponse(Integer.parseInt(environment.getProperty("status.success.code")),
-                environment.getProperty("status.forgotPassword.success"));
+                environment.getProperty("status.user.success"));
         return response;
     }
 
-    @Transactional
     @Override
     public Response resetPassword(String newPassword, String token) {
         int id = tokenGenerator.retrieveIdFromToken(token);
