@@ -113,8 +113,8 @@ public class User {
         return isVerified;
     }
 
-    public void setIsVerified(boolean isVerified) {
-        this.isVerified = isVerified;
+    public void setVerified(boolean verified) {
+        isVerified = verified;
     }
 
     @Override
