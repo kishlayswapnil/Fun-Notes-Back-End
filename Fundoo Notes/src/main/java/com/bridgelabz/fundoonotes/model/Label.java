@@ -2,16 +2,19 @@ package com.bridgelabz.fundoonotes.model;
 
 import org.springframework.data.annotation.Id;
 
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 
+@Entity
 public class Label {
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int labelId;
     private String name;
     private int userId;
 
+    @javax.persistence.Id
     public int getLabelId() {
         return labelId;
     }
