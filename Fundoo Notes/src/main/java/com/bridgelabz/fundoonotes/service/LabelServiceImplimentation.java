@@ -7,17 +7,18 @@ import com.bridgelabz.fundoonotes.model.Label;
 import com.bridgelabz.fundoonotes.model.Response;
 import com.bridgelabz.fundoonotes.model.User;
 import com.bridgelabz.fundoonotes.repository.LabelRepository;
-import com.bridgelabz.fundoonotes.repository.NoteRepository;
 import com.bridgelabz.fundoonotes.repository.UserRepository;
 import com.bridgelabz.fundoonotes.utility.ResponseInfo;
 import com.bridgelabz.fundoonotes.utility.TokenGenerator;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
+@PropertySource("classpath:status.properties")
 public class LabelServiceImplimentation implements LabelService{
 
     @Autowired
