@@ -7,5 +7,5 @@ import com.bridgelabz.fundoonotes.model.Response;
 public interface LabelService {
     Label create(LabelDto labelDto, String token);
     Response update(LabelDto labelDto, int id, String token);
-    Response delete(int id, String userToken);
+    Response delete(int id, String token);
 }
