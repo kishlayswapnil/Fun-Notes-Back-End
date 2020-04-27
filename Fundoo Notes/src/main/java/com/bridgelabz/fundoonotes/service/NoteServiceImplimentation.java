@@ -21,9 +21,13 @@ public class NoteServiceImplimentation implements NoteService {
 
     @Autowired
     private TokenGenerator tokenGenerator;
+    @Autowired
     private NoteRepository noteRepository;
+    @Autowired
     private UserRepository userRepository;
+    @Autowired
     private ModelMapper modelMapper;
+    @Autowired
     private Environment environment;
     private Response response;
     private Optional<User> userData;
