@@ -2,10 +2,11 @@ package com.bridgelabz.fundoonotes.model;
 
 import org.springframework.data.annotation.Id;
 
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 
-
+@Entity
 public class Note {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,6 +17,7 @@ public class Note {
 
     private String description;
 
+    @javax.persistence.Id
     public int getNoteId() {
         return noteId;
     }
