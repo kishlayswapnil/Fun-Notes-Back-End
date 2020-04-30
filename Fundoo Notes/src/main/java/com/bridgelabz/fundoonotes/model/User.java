@@ -1,11 +1,11 @@
 package com.bridgelabz.fundoonotes.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.data.annotation.Id;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Table;
+
+import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 //A Database class for user information.
 @Entity
@@ -25,6 +25,11 @@ public class User {
     private LocalDateTime registrationDate;
     private LocalDateTime modifiedDate;
     private boolean isVerified;
+
+    // collaborator for notes
+    @JsonIgnore
+    @ManyToMany(mappedBy = "collaboratedUsers")
+    private List<Note> collaboratedNotes;
 
     //An empty constructor.
     public User() {
@@ -115,6 +120,13 @@ public class User {
 
     public void setVerified(boolean verified) {
         isVerified = verified;
+    }
+
+    public List<Note> getCollaboratedNotes() {
+        return collaboratedNotes;
+    }
+    public void setCollaboratedNotes(List<Note> collaboratedNotes) {
+        this.collaboratedNotes = collaboratedNotes;
     }
 
     @Override
