@@ -25,4 +25,8 @@ public class MailService {
     public String fromMessage(String url,String token) {
         return  url +"/" +token;
     }
+
+    public void sendEmail(SimpleMailMessage mail) {
+        javaMailSender.send(mail);
+    }
 }
