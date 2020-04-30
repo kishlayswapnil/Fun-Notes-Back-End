@@ -4,7 +4,7 @@ import com.bridgelabz.fundoonotes.dto.LabelDto;
 import com.bridgelabz.fundoonotes.exception.LabelException;
 import com.bridgelabz.fundoonotes.exception.UserException;
 import com.bridgelabz.fundoonotes.model.Response;
-import com.bridgelabz.fundoonotes.service.LabelService;
+import com.bridgelabz.fundoonotes.service.LabelServiceImplimentation;
 import com.bridgelabz.fundoonotes.utility.ResponseInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,7 +17,7 @@ import javax.validation.Valid;
 @RequestMapping("/labels")
 public class LabelController {
     @Autowired
-    private LabelService labelService;
+    private LabelServiceImplimentation labelService;
 
     @PostMapping
     public ResponseEntity<Object> addLabel(@Valid @RequestBody LabelDto labelDto, @RequestHeader String token) {
@@ -52,5 +52,29 @@ public class LabelController {
     public ResponseEntity<Response> deleteLabel(@PathVariable int id,@RequestHeader String token) {
         Response response =labelService.delete(id, token);
         return new ResponseEntity(response, HttpStatus.OK);
+    }
+
+    @GetMapping("/getLabel")
+    public ResponseEntity<Object> getAllLabelsOfUser(@RequestHeader String token) {
+        Object response;
+        try {
+            response = labelService.getAllLabels(token);
+        }
+        catch(UserException e) {
+            response = ResponseInfo.getResponse(e.getErrorCode(),e.getMessage());
+        }
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Object> getLabel(@PathVariable int id, @RequestHeader String token) {
+        Object response;
+        try {
+            response = labelService.getLabel(id, token);
+        }
+        catch(UserException e) {
+            response = ResponseInfo.getResponse(e.getErrorCode(),e.getMessage());
+        }
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }
