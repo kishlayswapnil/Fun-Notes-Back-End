@@ -11,14 +11,12 @@ import com.bridgelabz.fundoonotes.repository.NoteRepository;
 import com.bridgelabz.fundoonotes.repository.UserRepository;
 import com.bridgelabz.fundoonotes.utility.ResponseInfo;
 import com.bridgelabz.fundoonotes.utility.TokenGenerator;
-import com.sun.tools.javac.resources.CompilerProperties;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
-import javax.security.auth.login.LoginException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;

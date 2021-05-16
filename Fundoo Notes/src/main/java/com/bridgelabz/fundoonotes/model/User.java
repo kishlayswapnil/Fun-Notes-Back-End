@@ -1,55 +1,38 @@
 package com.bridgelabz.fundoonotes.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.springframework.data.annotation.Id;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 
 //A Database class for user information.
 @Entity
-@Table(name = "UserData")
+@Table(name="user_data")
 public class User {
 
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
-    //Variables.
-    //Adding Id as primary key.
     private int id;
     private String firstName;
     private String lastName;
     private String emailId;
-    private long mobileNumber;
+    private String mobileNumber;
     private String password;
     private LocalDateTime registrationDate;
     private LocalDateTime modifiedDate;
     private boolean isVerified;
-
     // collaborator for notes
     @JsonIgnore
-    @ManyToMany(mappedBy = "collaboratedUsers")
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Note> collaboratedNotes;
 
-    //An empty constructor.
+
     public User() {
     }
 
-    //A parameterised constructor.
-    public User(int id, String firstName, String lastName, String emailId, long mobileNumber, String password, LocalDateTime registrationDate, LocalDateTime modifiedDate, boolean isVerified) {
-        this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.emailId = emailId;
-        this.mobileNumber = mobileNumber;
-        this.password = password;
-        this.registrationDate = registrationDate;
-        this.modifiedDate = modifiedDate;
-        this.isVerified = isVerified;
-    }
-
-    //Getters and setters for following variables.
-    @javax.persistence.Id
     public int getId() {
         return id;
     }
@@ -78,16 +61,16 @@ public class User {
         return emailId;
     }
 
-    public void setEmailId(String emailId) {
-        this.emailId = emailId;
+    public void setEmailId(String email) {
+        this.emailId = email;
     }
 
-    public long getMobileNumber() {
+    public String getMobileNumber() {
         return mobileNumber;
     }
 
-    public void setMobileNumber(long mobileNumber) {
-        this.mobileNumber = mobileNumber;
+    public void setMobileNumber(String phoneNumber) {
+        this.mobileNumber = phoneNumber;
     }
 
     public String getPassword() {
@@ -118,8 +101,8 @@ public class User {
         return isVerified;
     }
 
-    public void setVerified(boolean verified) {
-        isVerified = verified;
+    public void setVerified(boolean isVerified) {
+        this.isVerified = isVerified;
     }
 
     public List<Note> getCollaboratedNotes() {
@@ -131,16 +114,9 @@ public class User {
 
     @Override
     public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", emailId='" + emailId + '\'' +
-                ", mobileNumber=" + mobileNumber +
-                ", password='" + password + '\'' +
-                ", registrationDate=" + registrationDate +
-                ", modifiedDate=" + modifiedDate +
-                ", isVerified=" + isVerified +
-                '}';
+        return "User[ id = " + id + ", firstName = " + firstName + ", lastName = " + lastName + ", phoneNumber = "
+                + mobileNumber + ", email = " + emailId + ", password = " + password + ", registrationDate = "
+                + registrationDate + ", modifiedDate = " + modifiedDate + ", isVerified = " + isVerified + "]";
+
     }
 }

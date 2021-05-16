@@ -10,8 +10,8 @@ public class RabbitMqService {
     @Autowired
     private MailService mailService;
 
-    @RabbitListener(queues="${spring.rabbitmq.user.queue}")
-    public void recieveUserMail(SimpleMailMessage mail) {
-        mailService.sendEmail(mail);
-    }
+//    @RabbitListener(queues="${rabbitmq_queue_user}")
+//    public void recieveUserMail(SimpleMailMessage mail) {
+//        mailService.sendEmail(mail);
+//    }
 }

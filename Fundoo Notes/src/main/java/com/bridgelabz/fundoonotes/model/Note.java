@@ -1,64 +1,50 @@
 package com.bridgelabz.fundoonotes.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-import org.springframework.data.annotation.Id;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @Entity
+@Table(name="note_data")
 public class Note {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-
-    private int noteId;
-
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private int id;
     private String title;
-
+    @Lob
     private String description;
-
     private String color;
-
     private boolean isPinned;
-
     private boolean isArchived;
-
     private boolean isTrashed;
-
     private LocalDateTime createdDate;
-
     private LocalDateTime modifiedDate;
-
     private String reminder;
-
     private String repeatReminder;
 
-    @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(nullable = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
+    //@JsonIgnore
+    @ManyToOne
     private User user;
 
     //@JsonIgnore
-    @ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
-    @JoinTable(name = "note_label")
+    @ManyToMany(cascade = CascadeType.ALL)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<Label> labels;
 
-
-
-    @javax.persistence.Id
-    public int getNoteId() {
-        return noteId;
+    public Note() {
     }
 
-    public void setNoteId(int noteId) {
-        this.noteId = noteId;
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public String getTitle() {
@@ -85,30 +71,6 @@ public class Note {
         this.color = color;
     }
 
-    public boolean isPinned() {
-        return isPinned;
-    }
-
-    public void setPinned(boolean pinned) {
-        isPinned = pinned;
-    }
-
-    public boolean isArchived() {
-        return isArchived;
-    }
-
-    public void setArchived(boolean archived) {
-        isArchived = archived;
-    }
-
-    public boolean isTrashed() {
-        return isTrashed;
-    }
-
-    public void setTrashed(boolean trashed) {
-        isTrashed = trashed;
-    }
-
     public LocalDateTime getCreatedDate() {
         return createdDate;
     }
@@ -125,15 +87,38 @@ public class Note {
         this.modifiedDate = modifiedDate;
     }
 
-    public boolean addLabel(Label label) {
-        if (labels == null)
-            labels = new HashSet<>();
-        return labels.add(label);
+    public boolean isPinned() {
+        return isPinned;
     }
 
-    public boolean removeLabel(Label label) {
-        return labels.remove(label);
+    public void setPinned(boolean isPinned) {
+        this.isPinned = isPinned;
     }
+
+    public boolean isArchived() {
+        return isArchived;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public void setArchived(boolean isArchived) {
+        this.isArchived = isArchived;
+    }
+
+    public boolean isTrashed() {
+        return isTrashed;
+    }
+
+    public void setTrashed(boolean isTrashed) {
+        this.isTrashed = isTrashed;
+    }
+
     public String getReminder() {
         return reminder;
     }
@@ -150,24 +135,39 @@ public class Note {
         this.repeatReminder = repeatReminder;
     }
 
-    public Note() {
+    public Set<Label> getLabels() {
+        return labels;
     }
 
+    public void setLabels(Set<Label> labels) {
+        this.labels = labels;
+    }
+
+
+    public boolean addLabel(Label label) {
+        if (labels == null)
+            labels = new HashSet<>();
+        return labels.add(label);
+    }
+
+    public boolean removeLabel(Label label) {
+        return labels.remove(label);
+    }
+
+
+    //
     @Override
     public String toString() {
-        return "Note{" +
-                "noteId=" + noteId +
-                ", title='" + title + '\'' +
-                ", description='" + description + '\'' +
-                ", color='" + color + '\'' +
-                ", isPinned=" + isPinned +
-                ", isArchived=" + isArchived +
-                ", isTrashed=" + isTrashed +
-                ", createdDate=" + createdDate +
-                ", modifiedDate=" + modifiedDate +
-                ", reminder='" + reminder + '\'' +
-                ", repeatReminder='" + repeatReminder + '\'' +
-                '}';
+        String str = "Note [ id = " + id + ", title = " + title + ", description = " + description + ", color = "
+                + color + ", isPinned = " + isPinned + ", isArchived = " + isArchived + ", isTrashed = " + isTrashed
+                + ", createdDate = " + createdDate + ", modifiedDate = " + modifiedDate + ", labels = ";
+        if (labels != null) {
+            for (Label label : labels) {
+                str = str + label.getName() + ",";
+            }
+            str = str.substring(0, str.length() - 1);
+        }
+        return str + "]";
     }
 
     @Override
@@ -179,10 +179,12 @@ public class Note {
             else
                 return false;
         }
-        throw new IllegalArgumentException("Cannot compare objects that are not of Notes");
+        throw new IllegalArgumentException("Can't compare non-Note objects");
     }
+
     @Override
     public int hashCode() {
-        return Objects.hash(getNoteId(), getTitle(), getDescription(), getColor(), isPinned(), isArchived(), isTrashed(), getCreatedDate(), getModifiedDate(), getReminder(), getRepeatReminder());
+        return (id + title + description + color + isPinned + isArchived + isTrashed + createdDate + modifiedDate)
+                .toString().hashCode();
     }
 }
